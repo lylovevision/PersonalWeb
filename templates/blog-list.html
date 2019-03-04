@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}
+博客列表
+{% endblock %}
+{% block Navigation %}
+            <!-- Breadcrumb area start -->
+            <div class="breadcrumb-style-two gray-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="breadcrumb-content">
+                                <h2 class="page-cat">Blog Left Sidebar</h2>
+                                <ul class="breadcrumb-list">
+                                    <li><a href="/">Home</a></li>
+                                    <li>blog-list</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Breadcrumb area end -->
+{% endblock %}
+{% block content %}
+            <!-- Theme standard row start for blog -->
+            <div class="erika-standard-row white-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9 col-lg-push-3 col-md-8 col-md-push-4 col-sm-12">
+                            <div class="row">
+                                <div class="blog-masonry">
+                                {% for blog in all_blog.object_list  %}
+                                    <div class="col-md-6 col-sm-6 post-grid-item">
+                                        <article class="blog-post">
+                                            <div class="post-thumbnail">
+                                                <a href="#"><img src="{{ blog.img }}" alt=""></a>
+                                                <ul class="meta-info">
+                                                    <li><a href="#">{{ blog.add_time}}</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="post-content">
+                                                <div class="post-content-inner">
+                                                    <h3><a href="#">{{ blog.title }}</a></h3>
+                                                    <p>{{ blog.start_content }}</p>
+                                                </div>
+                                                <div class="post-footer-meta clearfix">
+                                                    <ul class="post-action-btn">
+                                                        <li><a href="#"><i class="icon-refresh"></i></a></li>
+                                                        <li><a href="#"><i class="icon-chat"></i></a></li>
+                                                        <li><a href="#"><i class="icon-heart"></i></a></li>
+                                                    </ul>
+                                                    <div class="read-more-wrapper">
+                                                        <a href="/blog/content/{{ blog.id }}" class="read-more">查看更多</a>
+                                                        <a href="#" class="like-count"><i class="ti-heart"></i><span>{{ blog.click_num }}</span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    </div>
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-lg-pull-9 col-md-4 col-md-pull-8 col-sm-12">
+                            <!--<aside class="single-widget">-->
+                                <!--<h4 class="widget-title">搜索</h4>-->
+                                <!--<div class="search-widget">-->
+                                    <!--<div>-->
+                                        <!--<input type="text" id="search" placeholder="python">-->
+                                        <!--<p id="search_form"><i class="ti-search"></i></p>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</aside>-->
+                            <aside class="single-widget">
+                                <h4 class="widget-title">标签</h4>
+                                <div class="tags">
+                                    {% for lable in lable_list %}
+                                        <a href="?lable={{ lable.id }}">{{ lable.lable }}</a>
+                                    {% endfor %}
+                                </div>
+                            </aside>
+                            <aside class="single-widget">
+                                <h4 class="widget-title">博客类别</h4>
+                                <ul class="post-cat-list">
+                                    {% for categorys in categorys_list %}
+                                    <li><a href="?categorys={{ categorys.id }}">{{ categorys.mondel }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </aside>
+                            <aside class="single-widget">
+                                <h4 class="widget-title">最近的帖子</h4>
+                                <div class="resent-post-widget">
+                                    {% for blog_list in blogs_ranking_list %}
+                                        <div class="widget-single-post clearfix">
+                                            <a href="#"><img style="height: 100px;width: 170px;" src="{{ blog_list.img }}" alt=""></a>
+                                            <div class="widget-post-content">
+                                                <h4><a href="/blog/content/{{ blog_list.id }}" >{{ blog_list.title }}</a></h4>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </aside>
+                        </div>
+
+                    </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                              <div class="text-center erika-pagingtion">
+                                  <ul class="pagination">
+                                  {% if all_blog.has_previous %}
+                                      <li><a href="?{{ all_blog.previous_page_number.querystring }}" class="prev">上一页</a></li>
+                                  {% endif %}
+
+                                  {% for page in all_blog.pages %}
+                                    {% if page %}
+                                        {% ifequal page all_blog.number %}
+                                            <li class="disabled"><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                                        {% else %}
+                                            <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                                        {% endifequal %}
+                                    {% else %}
+                                        <li class="none"><a href="">...</a></li>
+                                    {% endif %}
+                                  {% endfor %}
+                                {% if all_blog.has_next %}
+                                  <li class="long"><a href="?{{ all_blog.next_page_number.querystring }}">下一页</a></li>
+                                {% endif %}
+                                  </ul>
+                              </div>
+                          </div>
+
+                      </div>
+                  </div>
+
+
+                </div>
+            </div>
+            <!-- Theme standard row end for blog -->
+        </div>
+        <!-- Main content end -->
+        <!-- Footer area end -->
+    {% endblock %}
+    {% block js %}
+<script>
+
+</script>
+    {% endblock %}

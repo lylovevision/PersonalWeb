@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}
+博客列表
+{% endblock %}
+{% block Navigation %}
+<!-- Breadcrumb area start -->
+<!--<div class="breadcrumb-style-two gray-bg">-->
+    <!--<div class="container">-->
+        <!--<div class="row">-->
+            <!--<div class="col-xs-12">-->
+                <!--<div class="breadcrumb-content">-->
+                    <!--<h2 class="page-cat">Accordion</h2>-->
+                    <!--<ul class="breadcrumb-list">-->
+                        <!--<li><a href="index.html">Home</a></li>-->
+                        <!--<li>Accordion</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!-- Breadcrumb area end -->
+{% endblock %}
+{% block content %}
+            <!-- Theme standard row Start for Buttons -->
+            <div class="erika-standard-row">
+                <div class="container">
+                    <!--<div class="row">-->
+                        <!--<div class="col-xs-12">-->
+                            <!--<div class="area-heading area-heading-style-two text-center">-->
+                                <!--<h2 class="area-title">faq Accordion</h2>-->
+                                <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi tempora veritatis nemo aut ea iusto eos est expedita, quas ab adipisci.</p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="faq-content-wrapper">
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+
+                                    <div class="list-group">
+                                        {% for storage in storage_all %}
+                                        <a href="{{ storage.url_path }}" class="list-group-item">
+                                            <h4 class="list-group-item-heading">{{ storage.get_degree_display }}</h4>
+                                            <p class="list-group-item-text">{{ storage.explain }}&emsp;&emsp;{{ storage.add_time }}</p>
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Theme Standard row for buttons end -->
+    {% endblock %}
+    {% block js %}
+    {% endblock %}

@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+博客列表
+{% endblock %}
+{% block css %}
+<style type="text/css">
+          html, body
+          {
+              height: 100%;
+              width: 100%;
+             padding: 0;
+             margin: 0;
+         }
+
+         .dialog
+         {
+             width: 300px;
+             height: 400px;
+             position: absolute;
+             background-color: #ccc;
+             -webkit-box-shadow: 1px 1px 3px #292929;
+             -moz-box-shadow: 1px 1px 3px #292929;
+             box-shadow: 1px 1px 3px #292929;
+         }
+
+         .dialog-title
+         {
+             color: #fff;
+             background-color: #404040;
+             font-size: 12pt;
+             font-weight: bold;
+             padding: 4px 6px;
+             cursor: move;
+         }
+
+         .dialog-content
+         {
+             padding: 4px;
+         }
+
+         .disable-select *
+         {
+             -moz-user-select: none;
+             -ms-user-select: none;
+             -webkit-user-select: none;
+             user-select: none;
+         }
+     </style>
+{% endblock %}
+{% block Navigation %}
+<!-- Slider area start -->
+        <div class="slider-area static-dotted-bg" id="particle-ground">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="banner-static-content text-center">
+                            <h1 class="cd-headline clip is-full-width">
+                                    <span>余生</span>
+                                    <span class="cd-words-wrapper">
+                                        <b class="is-visible">都</b>
+                                        <b>是</b>
+                                        <b>你</b>
+                                    </span>
+                                </h1>
+                            <!--<p>我以诚待人</p>-->
+                            <!--<p>求得心安理得</p>-->
+                            <!--<a href="contact.html" class="button active-btn">联系我</a>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Slider area end -->
+{% endblock %}
+{% block content %}
+<div id="dlgTest" class="dialog">
+     <div class="dialog-title">常用工具</div>
+     <div class="dialog-content">
+         {% for tool in tool_all %}
+         <p><a href="{{ tool.url_path }}">{{ tool.name }}</a></p>
+         {% endfor %}
+     </div>
+ </div>
+<!-- Theme standard row start for blog -->
+<div class="erika-standard-row gray-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="area-heading area-heading-style-two text-center">
+                    <h2 class="area-title">最新的帖子</h2>
+                    <p>总之岁月漫长值得一生妥善安放.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for blog in blog_all %}
+            <div class="col-md-4 col-sm-6">
+                <article class="blog-post">
+                    <div class="post-thumbnail">
+                        <a href="#"><img src="{{ blog.img }}" alt=""></a>
+                        <ul class="meta-info">
+                            <li><a href="#">{{ blog.add_time}}</a></li>
+                        </ul>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-content-inner">
+                            <h3><a href="#">{{ blog.title }}</a></h3>
+                            <p>{{ blog.start_content }}</p>
+                        </div>
+                        <div class="post-footer-meta clearfix">
+                            <ul class="post-action-btn">
+                                <li><a href="#"><i class="icon-refresh"></i></a></li>
+                                <li><a href="#"><i class="icon-chat"></i></a></li>
+                                <li><a href="#"><i class="icon-heart"></i></a></li>
+                            </ul>
+                            <div class="read-more-wrapper">
+                                <a href="/blog/content/{{ blog.id }}" class="read-more">查看更多</a>
+                                <a href="" class="like-count"><i class="ti-heart"></i><span>{{ blog.click_num }}</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+        <!-- Main content end -->
+    {% endblock %}
+
+    {% block js %}
+<script type="text/javascript">
+     function addEvent(element, type, key, handler) {//绑定事件处理程序
+         if (element[type + key])
+             return false;
+         if (typeof element.addEventListener != "undefined") {
+             element[type + key] = handler;
+             element.addEventListener(type, handler, false);
+         }
+         else {
+             element['e' + type + key] = handler;
+             element[type + key] = function () {
+                 element['e' + type + key](window.event); //解决IE浏览器event及this问题
+             };
+             element.attachEvent('on' + type, element[type + key]);
+         }
+         return true;
+     }
+
+     function removeEvent(element, type, key) {//移除事件
+         if (!element[type + key])
+             return false;
+
+         if (typeof element.removeEventListener != "undefined") {
+             element.removeEventListener(type, element[type + key], false);
+         }
+         else {
+             element.detachEvent("on" + type, element[type + key]);
+             element['e' + type + key] = null;
+         }
+
+         element[type + key] = null;
+         return true;
+     }
+ </script>
+
+ <script type="text/javascript">
+     var Dragging = function (conf) { //参数为验证点击区域是否为可移动区域，如果是返回欲移动元素，负责返回null
+         var draggingObj = null; //dragging Dialog
+         var diffX = 0, diffY = 0;
+
+         var minX = conf.left != undefined ? conf.left : Number.NEGATIVE_INFINITY;
+         var maxX = conf.right != undefined ? conf.right : Number.POSITIVE_INFINITY;
+         var minY = conf.top != undefined ? conf.top : Number.NEGATIVE_INFINITY;
+        var maxY = conf.bottom != undefined ? conf.bottom : Number.POSITIVE_INFINITY;
+
+        var draggingObjWidth = 0,
+            draggingObjHeight = 0;
+
+        function mouseHandler(e) {
+            switch (e.type) {
+                case 'mousedown':
+                    draggingObj = conf.validateHandler(e);//验证是否为可点击移动区域
+                    if (draggingObj != null) {
+                        diffX = e.clientX - draggingObj.offsetLeft;
+                        diffY = e.clientY - draggingObj.offsetTop;
+
+                        var size = draggingObj.getBoundingClientRect();
+                        draggingObjWidth = size.right - size.left;
+                        draggingObjHeight = size.bottom - size.top;
+                        document.body.className += '  disable-select'; //禁止选中
+                        document.body.onselectstart = function () { return false; };
+                    }
+                    break;
+
+                case 'mousemove':
+                    if (draggingObj) {
+                        var x = e.clientX - diffX;
+                        var y = e.clientY - diffY;
+                        if (x > minX && x < maxX - draggingObjWidth) {
+                            draggingObj.style.left = x + 'px';
+                        }
+                        if (y > minY && y < maxY - draggingObjHeight) {
+                            draggingObj.style.top = y + 'px';
+                        }
+                    }
+                    break;
+
+                case 'mouseup':
+                    draggingObj = null;
+                    diffX = 0;
+                    diffY = 0;
+                    document.body.className = document.body.className.replace('  disable-select','');
+                    document.body.onselectstart = null;
+                    break;
+            }
+        };
+
+        return {
+            enable: function () {
+                addEvent(document, 'mousedown', 'drag-down', mouseHandler);
+                addEvent(document, 'mousemove', 'drag-move', mouseHandler);
+                addEvent(document, 'mouseup', 'drag-up', mouseHandler);
+            },
+            disable: function () {
+                removeEvent(document, 'mousedown', 'drag-down');
+                removeEvent(document, 'mousemove', 'drag-move');
+                removeEvent(document, 'mouseup', 'drag-up');
+            }
+        }
+    }
+
+    function getDraggingDialog(e) {
+        var target = e && e.target ? e.target : window.event.srcElement;
+        while (target && target.className.indexOf('dialog-title') == -1) {
+            target = target.offsetParent;
+        }
+        if (target != null) {
+            return target.offsetParent;
+        } else {
+            return null;
+        }
+    }
+
+    var config = {
+        validateHandler: getDraggingDialog,
+        top: document.documentElement.clientTop,
+        right: document.documentElement.clientWidth,
+        bottom: document.documentElement.clientHeight,
+        left: document.documentElement.clientLeft
+    };
+
+    Dragging(config).enable();
+</script>
+    {% endblock %}
