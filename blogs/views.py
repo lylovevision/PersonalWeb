@@ -20,7 +20,7 @@ class BlogListView(View):
         categorys_list = Categorys.objects.all()
 
         # 最近的帖子
-        lately_blogs = Blogs.objects.all()[:3]
+        lately_blogs = Blogs.objects.all().order_by("-add_time")[:3]
         blogs_ranking_list = []
         for lately_blog in lately_blogs:
             blogs_ranking_dict = {}

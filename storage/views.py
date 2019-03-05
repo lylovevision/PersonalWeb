@@ -11,7 +11,7 @@ class IndexView(View):
         tool_all = CommonTools.objects.all()
 
         # 博客内容
-        blog_list = Blogs.objects.all()
+        blog_list = Blogs.objects.all().order_by("-add_time")[:3]
         # 重组博客内容
         rb_blog_list = []
         for blog in blog_list:
@@ -30,10 +30,9 @@ class IndexView(View):
             rb_blog_dict['start_content'] = start_content[:90] + '...'
             rb_blog_list.append(rb_blog_dict)
             rb_blog_dict['id'] = blog.id
-        blog_all = rb_blog_list[:3]
         return render(request, 'index.html', {
             'tool_all' : tool_all,
-            'blog_all' : blog_all
+            'blog_all' : rb_blog_list
         })
 
 
